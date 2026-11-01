@@ -6,8 +6,9 @@
 
 ## Ссылки проекта
 
-- **Apollo Sandbox (GraphQL Playground):** `https://<your-deployed-app-url>/graphql` *(замените на URL задеплоенного сервиса, например на Railway / Render)*
-- **Healthcheck эндпоинт:** `https://<your-deployed-app-url>/health`
+- **Apollo Sandbox (GraphQL Playground):** [https://digital-business-card-lac.vercel.app/graphql](https://digital-business-card-lac.vercel.app/graphql)
+- **Healthcheck эндпоинт:** [https://digital-business-card-lac.vercel.app/health](https://digital-business-card-lac.vercel.app/health)
+- **GitHub Репозиторий:** [https://github.com/JamsenUP/digital-business-card](https://github.com/JamsenUP/digital-business-card)
 - **Кандидат:** Владислав Павленко
   - **GitHub:** [https://github.com/jamsen](https://github.com/jamsen)
   - **Портфолио:** [https://jamsen.vercel.app](https://jamsen.vercel.app)

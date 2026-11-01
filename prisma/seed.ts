@@ -7,39 +7,37 @@ async function main(): Promise<void> {
 
   console.log(`Starting idempotent database seed for profile: "${profileSlug}"...`);
 
-  await prisma.$transaction(async (tx) => {
-    // 1. Find or create profile record
-    const profile = await tx.profile.upsert({
-      where: { slug: profileSlug },
-      update: {
-        name: 'Владислав Павленко',
-        description:
-          'Full-Stack / Backend Developer (Node.js, TypeScript, NestJS, React, Next.js). Специализируюсь на проектировании масштабируемых REST и GraphQL API, создании Telegram Mini Apps и интеграции LLM-решений.',
-      },
-      create: {
-        slug: profileSlug,
-        name: 'Владислав Павленко',
-        description:
-          'Full-Stack / Backend Developer (Node.js, TypeScript, NestJS, React, Next.js). Специализируюсь на проектировании масштабируемых REST и GraphQL API, создании Telegram Mini Apps и интеграции LLM-решений.',
-      },
-    });
+  // 1. Find or create profile record
+  const profile = await prisma.profile.upsert({
+    where: { slug: profileSlug },
+    update: {
+      name: 'Владислав Павленко',
+      description:
+        'Full-Stack / Backend Developer (Node.js, TypeScript, NestJS, React, Next.js). Специализируюсь на проектировании масштабируемых REST и GraphQL API, создании Telegram Mini Apps и интеграции LLM-решений.',
+    },
+    create: {
+      slug: profileSlug,
+      name: 'Владислав Павленко',
+      description:
+        'Full-Stack / Backend Developer (Node.js, TypeScript, NestJS, React, Next.js). Специализируюсь на проектировании масштабируемых REST и GraphQL API, создании Telegram Mini Apps и интеграции LLM-решений.',
+    },
+  });
 
-    // 2. Remove previously linked records to ensure absolute idempotency
-    await tx.socialLink.deleteMany({
+  // 2. Atomically update all child records in a single batch transaction
+  await prisma.$transaction([
+    prisma.socialLink.deleteMany({
       where: { profileId: profile.id },
-    });
-    await tx.skill.deleteMany({
+    }),
+    prisma.skill.deleteMany({
       where: { profileId: profile.id },
-    });
-    await tx.experience.deleteMany({
+    }),
+    prisma.experience.deleteMany({
       where: { profileId: profile.id },
-    });
-    await tx.project.deleteMany({
+    }),
+    prisma.project.deleteMany({
       where: { profileId: profile.id },
-    });
-
-    // 3. Populate Social Links
-    await tx.socialLink.createMany({
+    }),
+    prisma.socialLink.createMany({
       data: [
         {
           profileId: profile.id,
@@ -57,10 +55,8 @@ async function main(): Promise<void> {
           url: 'https://t.me/scalemate_test_bot',
         },
       ],
-    });
-
-    // 4. Populate Skills
-    await tx.skill.createMany({
+    }),
+    prisma.skill.createMany({
       data: [
         {
           profileId: profile.id,
@@ -113,10 +109,8 @@ async function main(): Promise<void> {
           category: 'AI & Automation',
         },
       ],
-    });
-
-    // 5. Populate Experience
-    await tx.experience.createMany({
+    }),
+    prisma.experience.createMany({
       data: [
         {
           profileId: profile.id,
@@ -130,10 +124,8 @@ async function main(): Promise<void> {
           ],
         },
       ],
-    });
-
-    // 6. Populate Projects
-    await tx.project.createMany({
+    }),
+    prisma.project.createMany({
       data: [
         {
           profileId: profile.id,
@@ -156,12 +148,12 @@ async function main(): Promise<void> {
           url: 'https://jamsen.vercel.app',
         },
       ],
-    });
+    }),
+  ]);
 
-    console.log(
-      `Database successfully seeded for profile ID: ${profile.id} (slug: ${profile.slug})`,
-    );
-  });
+  console.log(
+    `Database successfully seeded for profile ID: ${profile.id} (slug: ${profile.slug})`,
+  );
 }
 
 main()

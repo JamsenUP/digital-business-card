@@ -1,13 +1,26 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import express, { Express, Request, Response } from 'express';
 import { AppModule } from './app.module';
 
+const server: Express = express();
+let isAppInitialized = false;
+
+async function createNestServer(expressInstance: Express) {
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressInstance),
+  );
+  app.enableCors();
+  await app.init();
+  return app;
+}
+
+// Standalone execution (Docker / Local Development)
 async function bootstrap(): Promise<void> {
   const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
-
-  app.enableCors();
-
+  const app = await createNestServer(server);
   const port = Number(process.env.PORT) || 3000;
   const host = '0.0.0.0';
 
@@ -17,4 +30,18 @@ async function bootstrap(): Promise<void> {
   logger.log(`Health check is available at: http://localhost:${port}/health`);
 }
 
-void bootstrap();
+if (!process.env.VERCEL) {
+  void bootstrap();
+}
+
+// Vercel Serverless Handler
+export default async function handler(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  if (!isAppInitialized) {
+    await createNestServer(server);
+    isAppInitialized = true;
+  }
+  server(req, res);
+}

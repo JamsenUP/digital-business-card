@@ -4,8 +4,12 @@
   "description": "Digital Business Card GraphQL API with NestJS, Prisma, and PostgreSQL",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": "26.x"
+  },
   "scripts": {
-    "build": "nest build",
+    "build": "prisma generate && nest build",
+    "postinstall": "prisma generate",
     "format": "prettier --write \"src/**/*.ts\" \"prisma/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
