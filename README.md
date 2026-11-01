@@ -10,9 +10,9 @@
 - **Healthcheck эндпоинт:** [https://digital-business-card-lac.vercel.app/health](https://digital-business-card-lac.vercel.app/health)
 - **GitHub Репозиторий:** [https://github.com/JamsenUP/digital-business-card](https://github.com/JamsenUP/digital-business-card)
 - **Кандидат:** Владислав Павленко
-  - **GitHub:** [https://github.com/jamsen](https://github.com/jamsen)
+  - **GitHub:** [https://github.com/JamsenUP](https://github.com/JamsenUP)
   - **Портфолио:** [https://jamsen.vercel.app](https://jamsen.vercel.app)
-  - **Telegram:** [@jamsen](https://t.me/scalemate_test_bot)
+  - **Telegram:** [@jamsenbang](https://t.me/jamsenbang)
 
 ---
 

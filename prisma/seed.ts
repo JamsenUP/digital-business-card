@@ -42,7 +42,7 @@ async function main(): Promise<void> {
         {
           profileId: profile.id,
           platform: 'GitHub',
-          url: 'https://github.com/jamsen',
+          url: 'https://github.com/JamsenUP',
         },
         {
           profileId: profile.id,
@@ -52,7 +52,7 @@ async function main(): Promise<void> {
         {
           profileId: profile.id,
           platform: 'Telegram',
-          url: 'https://t.me/scalemate_test_bot',
+          url: 'https://t.me/jamsenbang',
         },
       ],
     }),
@@ -139,6 +139,13 @@ async function main(): Promise<void> {
           name: 'Scalemate TMA',
           description: 'Telegram Mini App бот и веб-интерфейс',
           url: 'https://t.me/scalemate_test_bot',
+        },
+        {
+          profileId: profile.id,
+          name: 'Horizon',
+          description:
+            'Веб-приложение платформы недвижимости с интерактивным каталогом',
+          url: 'https://horizon-estate-six.vercel.app/',
         },
         {
           profileId: profile.id,
