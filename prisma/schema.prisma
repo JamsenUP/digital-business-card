@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id          String        @id @default(uuid())
+  slug        String        @unique @default("main")
+  name        String
+  description String
+  links       SocialLink[]
+  skills      Skill[]
+  experiences Experience[]
+  projects    Project[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@map("profiles")
+}
+
+model SocialLink {
+  id        String   @id @default(uuid())
+  platform  String
+  url       String
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@map("social_links")
+}
+
+model Skill {
+  id        String   @id @default(uuid())
+  name      String
+  category  String?
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@map("skills")
+}
+
+model Experience {
+  id           String   @id @default(uuid())
+  company      String
+  position     String
+  period       String
+  achievements String[]
+  profileId    String
+  profile      Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([profileId])
+  @@map("experiences")
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  url         String
+  profileId   String
+  profile     Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([profileId])
+  @@map("projects")
+}
